@@ -1,0 +1,17 @@
+# Markdown lint on every change: quartz-book's book-lint.yml, with this book's own
+# .markdownlint-cli2.yaml. The check is "markdownlint / markdownlint", required on main.
+name: lint
+
+on:
+  push:
+  pull_request:
+  # The Sunday community pull requests start it this way: a pull request the
+  # workflow token opens starts no pull_request runs, and lint is required on main.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  markdownlint:
+    uses: textbookproject2026-alt/quartz-book/.github/workflows/book-lint.yml@main

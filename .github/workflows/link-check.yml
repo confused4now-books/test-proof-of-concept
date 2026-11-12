@@ -1,0 +1,31 @@
+# Lychee checks links on push, on pull requests, and weekly (links rot without
+# anything being pushed here): quartz-book's book-link-check.yml. It skips the
+# platform's list (this book's own address, doi.org) and anything in this book's
+# own .lycheeignore, if it has one. Dead outside links are warnings and a comment
+# on the pull request; only a broken link inside the book fails the check, which
+# is "lychee / lychee", required on main.
+name: Check links
+
+on:
+  push:
+    paths:
+      - "**/*.md"
+      - ".lycheeignore"
+      - ".github/workflows/link-check.yml"
+  # Every pull request, whatever it changes: the check is required on main (batch
+  # 2b), and a required check that never reports would hold a pull request forever.
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1" # 06:00 UTC every Monday
+  # The Sunday community pull requests start it this way (see lint.yml).
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Only for the comment on a pull request.
+  pull-requests: write
+  issues: write
+
+jobs:
+  lychee:
+    uses: textbookproject2026-alt/quartz-book/.github/workflows/book-link-check.yml@main
